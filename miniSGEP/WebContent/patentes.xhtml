@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="_template.xhtml">
+	<ui:define name="titulo"> Registro de novas patentes </ui:define>
+	<ui:define name="conteudo">
+		<h:form>
+			<h:messages />
+			<fieldset>
+				<legend>Dados da nova patente</legend>
+				<h:panelGrid columns="3">
+					<h:outputText value="Titulo da patente: " for="titulo" />
+					<h:inputText id="titulo" value="#{patenteBean.patente.titulo}"
+						required="true" requiredMessage="Titulo obrigatório"
+						validatorMessage="Titulo não deve conter mais de 40 caracteres">
+						<f:validateLength maximum="40" />
+						<f:ajax event="blur" render="mensagemTitulo" />
+					</h:inputText>
+					<h:message id="mensagemTitulo" for="titulo" />
+
+					<h:outputText value="Resumo da reivindicação: " for="resumo" />
+					<h:inputText id="resumo" value="#{patenteBean.patente.resumo}"
+						required="true" requiredMessage="Resumo deve ser preenchido" />
+					<h:message id="mensagemResumo" for="resumo" />
+
+					<h:outputText value="Relatório descritivo: "
+						for="relatorio_descritivo" />
+					<h:inputText id="relatorio_descritivo"
+						value="#{patenteBean.patente.descricao}" required="true"
+						requiredMessage="Descrição deve ser preenchida" />
+					<h:message id="mensagemDescricao" for="relatorio_descritivo" />
+
+					<h:outputText value="Quadro reivindicatório: "
+						for="quadro_reivindicatorio" />
+					<h:inputText id="quadro_reivindicatorio"
+						value="#{patenteBean.patente.reivindicacao}" required="true"
+						requiredMessage="Quadro reivindicatório deve ser preenchido" />
+					<h:message id="mensagemReivindicacao" for="quadro_reivindicatorio" />
+
+					<h:outputText value="Data de validade: " for="data_de_validade" />
+					<h:inputText id="data_de_validade"
+						value="#{patenteBean.patente.data.time}" required="true"
+						requiredMessage="É necessário especificar uma data">
+						<f:convertDateTime pattern="dd/MM/yyyy"
+							timeZone="America/Sao_Paulo" />
+					</h:inputText>
+					<h:message id="mensagemData" for="data_de_validade" />
+				</h:panelGrid>
+			</fieldset>
+
+			<fieldset>
+				<legend>Selecione o(s) autor(es) da patente</legend>
+				<h:outputText value="Autor(es): " for="autor" />
+				<h:selectOneMenu id="autorMenu" value="#{patenteBean.autorId}">
+					<f:selectItems value="#{patenteBean.autores}" var="autor"
+						itemLabel="#{autor.nome}" itemValue="#{autor.id}" />
+				</h:selectOneMenu>
+				<h:commandButton value="Adicionar autor"
+					action="#{patenteBean.gravarAutor}" id="adicionaAutor">
+					<f:ajax execute="autorMenu" render="tabelaAutores" />
+				</h:commandButton>
+				<h:commandLink value="Cadastrar novo autor"
+					action="#{patenteBean.formAutor}" immediate="true" />
+				<h:dataTable value="#{patenteBean.autoresDaPatente}" var="autor"
+					id="tabelaAutores">
+					<h:column>
+						<h:outputText value="#{autor.nome}" />
+					</h:column>
+					<h:column>
+						<h:commandLink value="X" action="#{patenteBean.removerAutorDaPatente(autor)}"/>
+					</h:column>
+				</h:dataTable>
+			</fieldset>
+			<br />
+			<h:commandButton value="Registrar Patente"
+				action="#{patenteBean.gravar}" id="submeterPatente">
+				<f:ajax execute="@form"
+					render="@form :formTabelaPatentes:tabelaPatentes" />
+			</h:commandButton>
+		</h:form>
+		<br />
+		<h:form id="formTabelaPatentes">
+			<fieldset>
+				<h:dataTable value="#{patenteBean.patentes}" var="patente"
+					id="tabelaPatentes">
+					<h:column>
+						<f:facet name="header">Titulo</f:facet>
+						<br />
+						<h:outputText value="#{patente.titulo}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">Descrição</f:facet>
+						<br />
+						<h:outputText value="#{patente.descricao}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">Data de validade</f:facet>
+						<br />
+						<h:outputText value="#{patente.data.time}">
+							<f:convertDateTime pattern="dd/MM/yyyy"
+								timeZone="America/Sao_Paulo" />
+						</h:outputText>
+					</h:column>
+					<h:column>
+						<f:facet name="header">Alterar</f:facet>
+						<br />
+						<h:commandLink value="Alterar"
+							action="#{patenteBean.alterar(patente)}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header">Remover</f:facet>
+						<br />
+						<h:commandLink value="Remover"
+							action="#{patenteBean.remover(patente)}" />
+					</h:column>
+				</h:dataTable>
+			</fieldset>
+		</h:form>
+	</ui:define>
+</ui:composition>
+</html>
