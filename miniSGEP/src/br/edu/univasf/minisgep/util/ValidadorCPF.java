@@ -5,6 +5,9 @@ import java.util.InputMismatchException;
 public class ValidadorCPF {
 
 	 public static boolean isCPF(String CPF) {
+		 CPF = CPF.replace(".", "").replace("-", "");
+		 System.out.println(CPF);
+		 
 		// considera-se erro CPF's formados por uma sequencia de numeros iguais
 		    if (CPF.equals("00000000000") || CPF.equals("11111111111") ||
 		        CPF.equals("22222222222") || CPF.equals("33333333333") ||
@@ -60,6 +63,8 @@ public class ValidadorCPF {
 		  }
 		 
 		  public static String imprimeCPF(String CPF) {
+			  System.out.println(CPF.substring(0, 3) + "." + CPF.substring(3, 6) + "." +
+		      CPF.substring(6, 9) + "-" + CPF.substring(9, 11));
 		    return(CPF.substring(0, 3) + "." + CPF.substring(3, 6) + "." +
 		      CPF.substring(6, 9) + "-" + CPF.substring(9, 11));
 		  }

@@ -9,6 +9,31 @@
 <h:head />
 <h:body>
 	<div id="cabecalho">
+		<h:form>
+			<p:growl id="messages" showDetail="true" autoUpdate="true" />
+
+			<p:menubar rendered="#{usuarioLogado != null}">
+				<p:menuitem value="Nova patente" icon="ui-icon-document"
+					action="patentes?faces-redirect=true" />
+
+				<p:menuitem value="Cadastro de autores"
+					action="#{administradorBean.patantesRegistradasPorMes}" icon="ui-icon-person" />
+
+				<f:facet name="options">
+					<h:panelGrid columns="2">
+						<p:themeSwitcher id="basic" style="width:165px"
+							value="#{temaBean.tema}">
+							<f:selectItem itemLabel="Choose Theme" itemValue="" />
+							<f:selectItems value="#{temaBean.temas}" var="tema" itemLabel="#{tema}"/>
+							<f:ajax />
+						</p:themeSwitcher>
+						<p:commandButton value="Logout" icon="ui-icon-extlink"
+							action="#{loginBean.deslogar}" />
+					</h:panelGrid>
+				</f:facet>
+			</p:menubar>
+		</h:form>
+
 		<h:graphicImage library="img" name="logoNIT.png" style="principal" />
 		<h:graphicImage library="img" name="logoUnivasf.png" />
 		<h:form rendered="#{usuarioLogado != null}">

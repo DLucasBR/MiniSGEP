@@ -16,6 +16,7 @@ public class PatenteBean {
 
 	private Integer autorId;
 	private Patente patente = new Patente();
+	private List<Patente> patentes;
 
 	public List<Autor> getAutores() {
 		return new DAO<Autor>(Autor.class).listaTodos();
@@ -40,18 +41,21 @@ public class PatenteBean {
 			return;
 		}
 
-		if (this.patente.getId() == null)
-			new DAO<Patente>(Patente.class).adiciona(this.patente);
+		DAO<Patente> dao = new DAO<Patente>(Patente.class);
+		if (this.patente.getId() == null) {
+			dao.adiciona(this.patente);
+			this.patentes = dao.listaTodos();
+		}
 		else
-			new DAO<Patente>(Patente.class).atualiza(this.patente);
+			dao.atualiza(this.patente);
 
 		this.patente = new Patente();
 	}
 
-	public List<Autor> getAutoresDaPatente(){
+	public List<Autor> getAutoresDaPatente() {
 		return this.patente.getAutores();
 	}
-	
+
 	public Integer getAutorId() {
 		return autorId;
 	}
@@ -61,7 +65,10 @@ public class PatenteBean {
 	}
 
 	public List<Patente> getPatentes() {
-		return new DAO<Patente>(Patente.class).listaTodos();
+		DAO<Patente> dao = new DAO<Patente>(Patente.class);
+		if (this.patentes == null)
+			this.patentes = dao.listaTodos();
+		return patentes;
 	}
 
 	public String formAutor() {

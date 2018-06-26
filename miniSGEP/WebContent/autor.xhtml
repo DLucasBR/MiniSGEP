@@ -15,14 +15,14 @@
 	</f:metadata>
 	<ui:define name="titulo"> Registro de novos autores </ui:define>
 	<ui:define name="conteudo">
-		<h:form>
+		<h:form id="formAutor">
 			<p:fieldset legend="Dados do novo Autor">
 				<h:panelGrid columns="3">
 					<p:outputLabel value="CPF: " for="cpf" />
-					<p:inputText id="cpf" value="#{autorBean.autor.CPF}"
-						validator="#{autorBean.validaCPF}">
+					<p:inputMask id="cpf" value="#{autorBean.autor.CPF}"
+						validator="#{autorBean.validaCPF}" required="true" mask="999.999.999-99">
 						<f:ajax event="blur" render="messageCPF" />
-					</p:inputText>
+					</p:inputMask>
 					<p:message id="messageCPF" for="cpf" />
 
 					<p:outputLabel value="Nome: " for="nome" />
@@ -61,13 +61,13 @@
 
 
 					<p:outputLabel value="Telefone: " for="telefone" />
-					<p:inputText id="telefone" value="#{autorBean.autor.telefone}"
+					<p:inputMask id="telefone" value="#{autorBean.autor.telefone}"
 						required="true"
-						requiredMessage="O autor deve ter um número de telefone associado.">
+						requiredMessage="O autor deve ter um número de telefone associado." mask="(99)99999-9999">
 						<f:ajax event="blur" render="messageTelefone" />
 						<f:passThroughAttribute name="placeHolder"
-							value="Ex. (XX) 9XXXX-XXXX" />
-					</p:inputText>
+							value="Ex. (XX) XXXXX-XXXX" />
+					</p:inputMask>
 					<p:message id="messageTelefone" for="telefone" />
 
 
@@ -84,25 +84,19 @@
 		</h:form>
 		<br />
 		<h:form id="formTabelaAutores">
-			<p:fieldset legend="Autores cadastrados no sistema">
-				<h:dataTable value="#{autorBean.autores}" var="autor">
-					<h:column>
-						<f:facet name="header">Nome</f:facet>
-						<br />
-						<p:outputLabel value="#{autor.nome}" />
-					</h:column>
-					<h:column>
-						<br />
-						<h:commandLink value="Alterar"
-							action="#{autorBean.alterar(autor)}" />
-					</h:column>
-					<h:column>
-						<br />
-						<h:commandLink value="Remover"
-							action="#{autorBean.remover(autor)}" />
-					</h:column>
-				</h:dataTable>
-			</p:fieldset>
+
+			<p:dataList value="#{autorBean.autores}" var="autor"
+				type="definition">
+				<f:facet name="header">Autores cadastrados</f:facet>
+				<p:commandLink value="Alterar" action="#{autorBean.alterar(autor)}"
+					styleClass="ui-icon ui-icon-pencil"
+					style="float:left;margin-right:10px" update=":formAutor" />
+
+				<p:commandLink value="Remover" action="#{autorBean.remover(autor)}"
+					styleClass="ui-icon ui-icon-trash"
+					style="float:left;margin-right:10px" update="@form" />
+       				 #{autor.nome}
+				</p:dataList>
 		</h:form>
 	</ui:define>
 </ui:composition>

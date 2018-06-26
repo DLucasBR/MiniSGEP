@@ -51,7 +51,6 @@ public class AutorBean {
 			throw new ValidatorException(new FacesMessage("CPF invalido!"));
 		else
 			autor.setCPF(ValidadorCPF.imprimeCPF(CPF));
-
 	}
 
 	public String gravar() {
